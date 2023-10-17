@@ -24,72 +24,54 @@
  */
 
 #include <bmon/bmon.h>
-#include <bmon/output.h>
-#include <bmon/module.h>
 #include <bmon/conf.h>
 #include <bmon/group.h>
+#include <bmon/module.h>
+#include <bmon/output.h>
 #include <bmon/utils.h>
 
 static struct bmon_subsys output_subsys;
 
-void output_register(struct bmon_module *m)
-{
-	module_register(&output_subsys, m);
+void output_register(struct bmon_module *m) {
+  module_register(&output_subsys, m);
 }
 
-static void activate_default(void)
-{
-	/*
-	 * Try to activate a default output module if the user did not make
-	 * a selection
-	 */
-	if (!output_subsys.s_nmod) {
-		struct bmon_module *m;
+static void activate_default(void) {
+  /*
+   * Try to activate a default output module if the user did not make
+   * a selection
+   */
+  if (!output_subsys.s_nmod) {
+    struct bmon_module *m;
 
-		if (!output_set("curses"))
-			return;
+    if (!output_set("curses")) return;
 
-		if (!output_set("ascii"))
-			return;
+    if (!output_set("ascii")) return;
 
-		/* Fall back to anything that could act as default */
-		list_for_each_entry(m, &output_subsys.s_mod_list, m_list) {
-			if (m->m_flags & BMON_MODULE_DEFAULT)
-				if (!output_set(m->m_name))
-					return;
-		}
+    /* Fall back to anything that could act as default */
+    list_for_each_entry(m, &output_subsys.s_mod_list, m_list) {
+      if (m->m_flags & BMON_MODULE_DEFAULT)
+        if (!output_set(m->m_name)) return;
+    }
 
-		quit("No output module found\n");
-	}
+    quit("No output module found\n");
+  }
 }
 
-void output_pre(void)
-{
-	module_foreach_run_enabled_pre(&output_subsys);
-}
-					
-void output_draw(void)
-{
-	module_foreach_run_enabled(&output_subsys);
-}
+void output_pre(void) { module_foreach_run_enabled_pre(&output_subsys); }
 
-void output_post(void)
-{
-	module_foreach_run_enabled_post(&output_subsys);
-}
+void output_draw(void) { module_foreach_run_enabled(&output_subsys); }
 
-int output_set(const char *name)
-{
-	return module_set(&output_subsys, name);
-}
+void output_post(void) { module_foreach_run_enabled_post(&output_subsys); }
+
+int output_set(const char *name) { return module_set(&output_subsys, name); }
 
 static struct bmon_subsys output_subsys = {
-	.s_name			= "output",
-	.s_activate_default	= &activate_default,
-	.s_mod_list		= LIST_SELF(output_subsys.s_mod_list),
+    .s_name = "output",
+    .s_activate_default = &activate_default,
+    .s_mod_list = LIST_SELF(output_subsys.s_mod_list),
 };
 
-static void __init __output_init(void)
-{
-	return module_register_subsys(&output_subsys);
+static void __init __output_init(void) {
+  return module_register_subsys(&output_subsys);
 }

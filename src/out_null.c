@@ -27,30 +27,25 @@
 #include <bmon/output.h>
 #include <bmon/utils.h>
 
-static void print_help(void)
-{
-	printf(
-		"null - No output\n" \
-		"\n" \
-		"  Disable primary output method\n" \
-		"  Author: Thomas Graf <tgraf@suug.ch>\n" \
-		"\n");
+static void print_help(void) {
+  printf(
+      "null - No output\n"
+      "\n"
+      "  Disable primary output method\n"
+      "  Author: Thomas Graf <tgraf@suug.ch>\n"
+      "\n");
 }
 
-static void null_parse_opt(const char *type, const char *value)
-{
-	if (!strcasecmp(type, "help")) {
-		print_help();
-		exit(0);
-	}
+static void null_parse_opt(const char *type, const char *value) {
+  if (!strcasecmp(type, "help")) {
+    print_help();
+    exit(0);
+  }
 }
 
 static struct bmon_module null_ops = {
-	.m_name		= "null",
-	.m_parse_opt	= null_parse_opt,
+    .m_name = "null",
+    .m_parse_opt = null_parse_opt,
 };
 
-static void __init null_init(void)
-{
-	output_register(&null_ops);
-}
+static void __init null_init(void) { output_register(&null_ops); }

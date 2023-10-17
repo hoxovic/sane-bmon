@@ -26,41 +26,41 @@
 #ifndef __BMON_CONFIG_H_
 #define __BMON_CONFIG_H_
 
-#include <bmon/defs.h>
 #include <bmon/compile-fixes.h>
+#include <bmon/defs.h>
 
 #if STDC_HEADERS != 1
 #error "*** ERROR: ANSI C headers required for compilation ***"
 #endif
 
-#include <stdio.h>
-#include <ctype.h>
-#include <stdarg.h>
-#include <signal.h>
-#include <limits.h>
-#include <stdlib.h>
-#include <math.h>
-#include <inttypes.h>
-#include <sys/file.h>
 #include <assert.h>
-#include <syslog.h>
-#include <sys/wait.h>
+#include <ctype.h>
 #include <dirent.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <math.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/file.h>
+#include <sys/wait.h>
+#include <syslog.h>
 #ifdef SYS_BSD
-# include <float.h>
+#include <float.h>
 #elif !defined(__ANDROID__)
-# include <values.h>
+#include <values.h>
 #endif
 
 #if TIME_WITH_SYS_TIME
-# include <sys/time.h>
-# include <time.h>
+#include <sys/time.h>
+#include <time.h>
 #else
-# if HAVE_SYS_TIME_H
-#  include <sys/time.h>
-# else
-#  include <time.h>
-# endif
+#if HAVE_SYS_TIME_H
+#include <sys/time.h>
+#else
+#include <time.h>
+#endif
 #endif
 
 #ifdef HAVE_VFORK_H
@@ -103,27 +103,27 @@
 #include <getopt.h>
 #endif
 
-#include <sys/stat.h>
+#include <errno.h>
 #include <grp.h>
 #include <pwd.h>
-#include <errno.h>
+#include <sys/stat.h>
 
 #if defined HAVE_SYS_UTSNAME_H
 #include <sys/utsname.h>
 #endif
 
 #if defined HAVE_NCURSESW_CURSES_H
-#  include <ncursesw/curses.h>
+#include <ncursesw/curses.h>
 #elif defined HAVE_NCURSESW_H
-#  include <ncursesw.h>
+#include <ncursesw.h>
 #elif defined HAVE_NCURSES_CURSES_H
-#  include <ncurses/curses.h>
+#include <ncurses/curses.h>
 #elif defined HAVE_NCURSES_H
-#  include <ncurses.h>
+#include <ncurses.h>
 #elif defined HAVE_CURSES_H
-#  include <curses.h>
+#include <curses.h>
 #else
-#  error "SysV or X/Open-compatible Curses header file required"
+#error "SysV or X/Open-compatible Curses header file required"
 #endif
 
 #include <netinet/in.h>
@@ -132,10 +132,9 @@
 #include <netinet6/in6.h>
 #endif
 
-#include <sys/socket.h>
 #include <arpa/inet.h>
-
 #include <confuse.h>
+#include <sys/socket.h>
 
 #ifndef IFNAMSIZ
 #define IFNAMSIZ 16

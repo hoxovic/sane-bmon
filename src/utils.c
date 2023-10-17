@@ -32,122 +32,106 @@
 #include <mach/mach.h>
 #endif
 
-void *xcalloc(size_t n, size_t s)
-{
-	void *d = calloc(n, s);
+void *xcalloc(size_t n, size_t s) {
+  void *d = calloc(n, s);
 
-	if (NULL == d) {
-		fprintf(stderr, "xalloc: Out of memory\n");
-		exit(ENOMEM);
-	}
+  if (NULL == d) {
+    fprintf(stderr, "xalloc: Out of memory\n");
+    exit(ENOMEM);
+  }
 
-	return d;
+  return d;
 }
 
-void *xrealloc(void *p, size_t s)
-{
-	void *d = realloc(p, s);
+void *xrealloc(void *p, size_t s) {
+  void *d = realloc(p, s);
 
-	if (NULL == d) {
-		fprintf(stderr, "xrealloc: Out of memory!\n");
-		exit(ENOMEM);
-	}
+  if (NULL == d) {
+    fprintf(stderr, "xrealloc: Out of memory!\n");
+    exit(ENOMEM);
+  }
 
-	return d;
+  return d;
 }
 
-void xfree(void *d)
-{
-	if (d)
-		free(d);
+void xfree(void *d) {
+  if (d) free(d);
 }
 
-float timestamp_to_float(timestamp_t *src)
-{
-	return (float) src->tv_sec + ((float) src->tv_usec / 1000000.0f);
+float timestamp_to_float(timestamp_t *src) {
+  return (float)src->tv_sec + ((float)src->tv_usec / 1000000.0f);
 }
 
-int64_t timestamp_to_int(timestamp_t *src)
-{
-	return (src->tv_sec * 1000000ULL) + src->tv_usec;
+int64_t timestamp_to_int(timestamp_t *src) {
+  return (src->tv_sec * 1000000ULL) + src->tv_usec;
 }
 
-void float_to_timestamp(timestamp_t *dst, float src)
-{
-	dst->tv_sec = (time_t) src;
-	dst->tv_usec = (src - ((float) ((time_t) src))) * 1000000.0f;
+void float_to_timestamp(timestamp_t *dst, float src) {
+  dst->tv_sec = (time_t)src;
+  dst->tv_usec = (src - ((float)((time_t)src))) * 1000000.0f;
 }
 
-void timestamp_add(timestamp_t *dst, timestamp_t *src1, timestamp_t *src2)
-{
-	dst->tv_sec = src1->tv_sec + src2->tv_sec;
-	dst->tv_usec = src1->tv_usec + src2->tv_usec;
+void timestamp_add(timestamp_t *dst, timestamp_t *src1, timestamp_t *src2) {
+  dst->tv_sec = src1->tv_sec + src2->tv_sec;
+  dst->tv_usec = src1->tv_usec + src2->tv_usec;
 
-	if (dst->tv_usec >= 1000000) {
-		dst->tv_sec++;
-		dst->tv_usec -= 1000000;
-	}
+  if (dst->tv_usec >= 1000000) {
+    dst->tv_sec++;
+    dst->tv_usec -= 1000000;
+  }
 }
 
-void timestamp_sub(timestamp_t *dst, timestamp_t *src1, timestamp_t *src2)
-{
-	dst->tv_sec = src1->tv_sec - src2->tv_sec;
-	dst->tv_usec = src1->tv_usec - src2->tv_usec;
-	if (dst->tv_usec < 0) {
-		dst->tv_sec--;
-		dst->tv_usec += 1000000;
-	}
+void timestamp_sub(timestamp_t *dst, timestamp_t *src1, timestamp_t *src2) {
+  dst->tv_sec = src1->tv_sec - src2->tv_sec;
+  dst->tv_usec = src1->tv_usec - src2->tv_usec;
+  if (dst->tv_usec < 0) {
+    dst->tv_sec--;
+    dst->tv_usec += 1000000;
+  }
 }
 
-int timestamp_le(timestamp_t *a, timestamp_t *b)
-{
-	if (a->tv_sec > b->tv_sec)
-		return 0;
+int timestamp_le(timestamp_t *a, timestamp_t *b) {
+  if (a->tv_sec > b->tv_sec) return 0;
 
-	if (a->tv_sec < b->tv_sec || a->tv_usec <= b->tv_usec)
-		return 1;
-	
-	return 0;
+  if (a->tv_sec < b->tv_sec || a->tv_usec <= b->tv_usec) return 1;
+
+  return 0;
 }
 
-int timestamp_is_negative(timestamp_t *ts)
-{
-	return (ts->tv_sec < 0 || ts->tv_usec < 0);
+int timestamp_is_negative(timestamp_t *ts) {
+  return (ts->tv_sec < 0 || ts->tv_usec < 0);
 }
 
-void update_timestamp(timestamp_t *dst)
-{
+void update_timestamp(timestamp_t *dst) {
 #ifdef __MACH__
-	clock_serv_t cclock;
-	mach_timespec_t tp;
+  clock_serv_t cclock;
+  mach_timespec_t tp;
 
-	host_get_clock_service(mach_host_self(), SYSTEM_CLOCK, &cclock);
-	clock_get_time(cclock, &tp);
-	mach_port_deallocate(mach_task_self(), cclock);
+  host_get_clock_service(mach_host_self(), SYSTEM_CLOCK, &cclock);
+  clock_get_time(cclock, &tp);
+  mach_port_deallocate(mach_task_self(), cclock);
 #else
-	struct timespec tp;
+  struct timespec tp;
 
-	clock_gettime(CLOCK_MONOTONIC, &tp);
+  clock_gettime(CLOCK_MONOTONIC, &tp);
 #endif
 
-	dst->tv_sec = tp.tv_sec;
-	dst->tv_usec = tp.tv_nsec / 1000;
+  dst->tv_sec = tp.tv_sec;
+  dst->tv_usec = tp.tv_nsec / 1000;
 }
 
-void copy_timestamp(timestamp_t *ts1, timestamp_t *ts2)
-{
-	ts1->tv_sec = ts2->tv_sec;
-	ts1->tv_usec = ts2->tv_usec;
+void copy_timestamp(timestamp_t *ts1, timestamp_t *ts2) {
+  ts1->tv_sec = ts2->tv_sec;
+  ts1->tv_usec = ts2->tv_usec;
 }
 
-float timestamp_diff(timestamp_t *t1, timestamp_t *t2)
-{
-	float diff;
+float timestamp_diff(timestamp_t *t1, timestamp_t *t2) {
+  float diff;
 
-	diff = t2->tv_sec - t1->tv_sec;
-	diff += (((float) t2->tv_usec - (float) t1->tv_usec) / 1000000.0f);
+  diff = t2->tv_sec - t1->tv_sec;
+  diff += (((float)t2->tv_usec - (float)t1->tv_usec) / 1000000.0f);
 
-	return diff;
+  return diff;
 }
 
 #if 0
@@ -219,12 +203,13 @@ char *timestamp2str(timestamp_t *ts, char *buf, size_t len)
 	char *units[] = {"d", "h", "m", "s", "usec"};
 	time_t sec = ts->tv_sec;
 
-#define _SPLIT(idx, unit) if ((split[idx] = sec / unit) > 0) sec %= unit
+#define _SPLIT(idx, unit) \
+  if ((split[idx] = sec / unit) > 0) sec %= unit
 	_SPLIT(0, 86400);	/* days */
 	_SPLIT(1, 3600);	/* hours */
 	_SPLIT(2, 60);		/* minutes */
 	_SPLIT(3, 1);		/* seconds */
-#undef  _SPLIT
+#undef _SPLIT
 	split[4] = ts->tv_usec;
 
 	memset(buf, 0, len);

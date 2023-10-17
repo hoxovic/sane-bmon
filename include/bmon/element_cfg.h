@@ -29,25 +29,24 @@
 #include <bmon/bmon.h>
 #include <bmon/conf.h>
 
-#define ELEMENT_CFG_SHOW	(1 << 0)
-#define ELEMENT_CFG_HIDE	(1 << 1)
+#define ELEMENT_CFG_SHOW (1 << 0)
+#define ELEMENT_CFG_HIDE (1 << 1)
 
-struct element_cfg
-{
-	char *			ec_name;	/* Name of element config */
-	char *			ec_parent;	/* Name of parent */
-	char *			ec_description;	/* Human readable description  */
-	uint64_t		ec_rxmax;	/* Maximum RX value expected */
-	uint64_t		ec_txmax;	/* Minimum TX value expected */
-	unsigned int		ec_flags;	/* Flags */
+struct element_cfg {
+  char *ec_name;         /* Name of element config */
+  char *ec_parent;       /* Name of parent */
+  char *ec_description;  /* Human readable description  */
+  uint64_t ec_rxmax;     /* Maximum RX value expected */
+  uint64_t ec_txmax;     /* Minimum TX value expected */
+  unsigned int ec_flags; /* Flags */
 
-	struct list_head	ec_list;	/* Internal, do not modify */
-	int			ec_refcnt;	/* Internal, do not modify */
+  struct list_head ec_list; /* Internal, do not modify */
+  int ec_refcnt;            /* Internal, do not modify */
 };
 
-extern struct element_cfg *	element_cfg_alloc(const char *);
-extern struct element_cfg *	element_cfg_create(const char *);
-extern void			element_cfg_free(struct element_cfg *);
-extern struct element_cfg *	element_cfg_lookup(const char *);
+extern struct element_cfg *element_cfg_alloc(const char *);
+extern struct element_cfg *element_cfg_create(const char *);
+extern void element_cfg_free(struct element_cfg *);
+extern struct element_cfg *element_cfg_lookup(const char *);
 
 #endif

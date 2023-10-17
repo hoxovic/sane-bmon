@@ -31,66 +31,56 @@
 
 static LIST_HEAD(cfg_list);
 
-struct element_cfg *element_cfg_alloc(const char *name)
-{
-	struct element_cfg *ec;
+struct element_cfg *element_cfg_alloc(const char *name) {
+  struct element_cfg *ec;
 
-	if ((ec = element_cfg_lookup(name))) {
-		ec->ec_refcnt++;
-		return ec;
-	}
+  if ((ec = element_cfg_lookup(name))) {
+    ec->ec_refcnt++;
+    return ec;
+  }
 
-	ec = xcalloc(1, sizeof(*ec));
-	ec->ec_name = strdup(name);
-	ec->ec_refcnt = 1;
+  ec = xcalloc(1, sizeof(*ec));
+  ec->ec_name = strdup(name);
+  ec->ec_refcnt = 1;
 
-	list_add_tail(&ec->ec_list, &cfg_list);
+  list_add_tail(&ec->ec_list, &cfg_list);
 
-	return ec;
+  return ec;
 }
 
-struct element_cfg *element_cfg_create(const char *name)
-{
-	struct element_cfg *cfg;
+struct element_cfg *element_cfg_create(const char *name) {
+  struct element_cfg *cfg;
 
-	if (!(cfg = element_cfg_lookup(name)))
-		cfg = element_cfg_alloc(name);
+  if (!(cfg = element_cfg_lookup(name))) cfg = element_cfg_alloc(name);
 
-	return cfg;
+  return cfg;
 }
 
-static void __element_cfg_free(struct element_cfg *ec)
-{
-	list_del(&ec->ec_list);
-	
-	xfree(ec->ec_name);
-	xfree(ec->ec_description);
-	xfree(ec);
+static void __element_cfg_free(struct element_cfg *ec) {
+  list_del(&ec->ec_list);
+
+  xfree(ec->ec_name);
+  xfree(ec->ec_description);
+  xfree(ec);
 }
 
-void element_cfg_free(struct element_cfg *ec)
-{
-	if (!ec || --ec->ec_refcnt)
-		return;
+void element_cfg_free(struct element_cfg *ec) {
+  if (!ec || --ec->ec_refcnt) return;
 
-	__element_cfg_free(ec);
+  __element_cfg_free(ec);
 }
 
-struct element_cfg *element_cfg_lookup(const char *name)
-{
-	struct element_cfg *ec;
+struct element_cfg *element_cfg_lookup(const char *name) {
+  struct element_cfg *ec;
 
-	list_for_each_entry(ec, &cfg_list, ec_list)
-		if (!strcmp(name, ec->ec_name))
-			return ec;
-	
-	return NULL;
+  list_for_each_entry(ec, &cfg_list,
+                      ec_list) if (!strcmp(name, ec->ec_name)) return ec;
+
+  return NULL;
 }
 
-static void __exit __element_cfg_exit(void)
-{
-	struct element_cfg *ec, *n;
+static void __exit __element_cfg_exit(void) {
+  struct element_cfg *ec, *n;
 
-	list_for_each_entry_safe(ec, n, &cfg_list, ec_list)
-		__element_cfg_free(ec);
+  list_for_each_entry_safe(ec, n, &cfg_list, ec_list) __element_cfg_free(ec);
 }

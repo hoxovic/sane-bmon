@@ -31,12 +31,11 @@
 
 struct element;
 
-struct info
-{
-	char *			i_name;
-	char *			i_value;
+struct info {
+  char* i_name;
+  char* i_value;
 
-	struct list_head	i_list;
+  struct list_head i_list;
 };
 
 #endif

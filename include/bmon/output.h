@@ -30,10 +30,10 @@
 #include <bmon/conf.h>
 #include <bmon/module.h>
 
-extern void		output_register(struct bmon_module *);
-extern int		output_set(const char *);
-extern void		output_pre(void);
-extern void		output_draw(void);
-extern void		output_post(void);
+extern void output_register(struct bmon_module *);
+extern int output_set(const char *);
+extern void output_pre(void);
+extern void output_draw(void);
+extern void output_post(void);
 
 #endif

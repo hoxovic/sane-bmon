@@ -31,70 +31,61 @@
 struct element;
 
 enum {
-	GT_MAJOR,
-	GT_MINOR,
-	__GT_MAX,
+  GT_MAJOR,
+  GT_MINOR,
+  __GT_MAX,
 };
 
 #define GT_MAX (__GT_MAX - 1)
 
 #define GROUP_COL_MAX (__GT_MAX * 2)
 
-struct group_hdr
-{
-	char *			gh_name;
-	char *			gh_title;
-	char *			gh_column[GROUP_COL_MAX];
-	struct list_head	gh_list;
+struct group_hdr {
+  char *gh_name;
+  char *gh_title;
+  char *gh_column[GROUP_COL_MAX];
+  struct list_head gh_list;
 };
 
-extern struct group_hdr *	group_lookup_hdr(const char *);
-extern int			group_new_hdr(const char *, const char *,
-					      const char *, const char *,
-					      const char *, const char *);
-extern int			group_new_derived_hdr(const char *,
-						      const char *,
-						      const char *);
+extern struct group_hdr *group_lookup_hdr(const char *);
+extern int group_new_hdr(const char *, const char *, const char *, const char *,
+                         const char *, const char *);
+extern int group_new_derived_hdr(const char *, const char *, const char *);
 
-struct element_group
-{
-	char *			g_name;
-	struct group_hdr *	g_hdr;
+struct element_group {
+  char *g_name;
+  struct group_hdr *g_hdr;
 
-	struct list_head	g_elements;
-	unsigned int		g_nelements;
+  struct list_head g_elements;
+  unsigned int g_nelements;
 
-	/* Currently selected element in this group */
-	struct element *	g_current;
+  /* Currently selected element in this group */
+  struct element *g_current;
 
-	struct list_head	g_list;
+  struct list_head g_list;
 };
 
-#define GROUP_CREATE		1
+#define GROUP_CREATE 1
 
-extern struct element_group *	group_lookup(const char *, int);
-extern void			reset_update_flags(void);
-extern void			free_unused_elements(void);
-extern void			calc_rates(void);
+extern struct element_group *group_lookup(const char *, int);
+extern void reset_update_flags(void);
+extern void free_unused_elements(void);
+extern void calc_rates(void);
 
-extern void			group_foreach(
-					void (*cb)(struct element_group *,
-						   void *),
-					void *);
-extern void			group_foreach_recursive(
-					void (*cb)(struct element_group *,
-						   struct element *, void *),
-					void *);
+extern void group_foreach(void (*cb)(struct element_group *, void *), void *);
+extern void group_foreach_recursive(void (*cb)(struct element_group *,
+                                               struct element *, void *),
+                                    void *);
 
-extern void			group_foreach_element(struct element_group *,
-					void (*cb)(struct element_group *,
-						   struct element *, void *),
-					void *);
+extern void group_foreach_element(struct element_group *,
+                                  void (*cb)(struct element_group *,
+                                             struct element *, void *),
+                                  void *);
 
-extern struct element_group *	group_current(void);
-extern struct element_group *	group_select_first(void);
-extern struct element_group *	group_select_last(void);
-extern struct element_group *	group_select_next(void);
-extern struct element_group *	group_select_prev(void);
+extern struct element_group *group_current(void);
+extern struct element_group *group_select_first(void);
+extern struct element_group *group_select_last(void);
+extern struct element_group *group_select_next(void);
+extern struct element_group *group_select_prev(void);
 
 #endif

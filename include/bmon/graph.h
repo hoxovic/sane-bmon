@@ -32,37 +32,31 @@
 struct history;
 
 struct graph_cfg {
-	int			gc_height,
-				gc_width,
-				gc_flags;
+  int gc_height, gc_width, gc_flags;
 
-	char			gc_background,
-				gc_foreground,
-				gc_noise,
-				gc_unknown;
-	
-	struct unit *		gc_unit;
+  char gc_background, gc_foreground, gc_noise, gc_unknown;
+
+  struct unit *gc_unit;
 };
 
 struct graph_table {
-	char *			gt_table;
-	char *			gt_y_unit;
-	float *			gt_scale;
+  char *gt_table;
+  char *gt_y_unit;
+  float *gt_scale;
 };
 
 struct graph {
-	struct graph_cfg	g_cfg;
-	struct graph_table	g_rx,
-				g_tx;
+  struct graph_cfg g_cfg;
+  struct graph_table g_rx, g_tx;
 
-	struct list_head	g_list;
+  struct list_head g_list;
 };
-	
-extern void			graph_free(struct graph *);
-extern struct graph *		graph_alloc(struct history *, struct graph_cfg *);
-extern void			graph_refill(struct graph *, struct history *);
 
-extern size_t			graph_row_size(struct graph_cfg *);
+extern void graph_free(struct graph *);
+extern struct graph *graph_alloc(struct history *, struct graph_cfg *);
+extern void graph_refill(struct graph *, struct history *);
+
+extern size_t graph_row_size(struct graph_cfg *);
 
 extern void new_graph(void);
 extern void del_graph(void);

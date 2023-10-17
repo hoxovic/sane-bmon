@@ -34,17 +34,16 @@ extern int input_set(const char *);
 extern void input_register(struct bmon_module *);
 extern void input_read(void);
 
-struct reader_timing
-{
-	timestamp_t rt_last_read;	/* timestamp taken before read */
-	timestamp_t rt_next_read;	/* estimated next read */
+struct reader_timing {
+  timestamp_t rt_last_read; /* timestamp taken before read */
+  timestamp_t rt_next_read; /* estimated next read */
 
-	struct {
-		float v_error;
-		float v_max;
-		float v_min;
-		float v_total;
-	} rt_variance;
+  struct {
+    float v_error;
+    float v_max;
+    float v_min;
+    float v_total;
+  } rt_variance;
 };
 
 extern struct reader_timing rtiming;

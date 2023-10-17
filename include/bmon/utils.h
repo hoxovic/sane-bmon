@@ -28,10 +28,10 @@
 
 #include <bmon/bmon.h>
 
-extern void * xcalloc(size_t, size_t);
-extern void * xrealloc(void *, size_t);
+extern void *xcalloc(size_t, size_t);
+extern void *xrealloc(void *, size_t);
 extern void xfree(void *);
-extern void quit (const char *, ...);
+extern void quit(const char *, ...);
 
 extern float timestamp_to_float(timestamp_t *);
 extern int64_t timestamp_to_int(timestamp_t *);
@@ -52,14 +52,12 @@ extern float timestamp_diff(timestamp_t *, timestamp_t *);
 
 #if 0
 
-
-
 #if __BYTE_ORDER == __BIG_ENDIAN
 #define xntohll(N) (N)
 #define xhtonll(N) (N)
 #else
-#define xntohll(N) ((((uint64_t) ntohl(N)) << 32) + ntohl((N) >> 32))
-#define xhtonll(N) ((((uint64_t) htonl(N)) << 32) + htonl((N) >> 32))
+#define xntohll(N) ((((uint64_t)ntohl(N)) << 32) + ntohl((N) >> 32))
+#define xhtonll(N) ((((uint64_t)htonl(N)) << 32) + htonl((N) >> 32))
 #endif
 
 enum {

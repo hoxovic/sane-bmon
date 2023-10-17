@@ -30,61 +30,46 @@
 
 static struct bmon_subsys input_subsys;
 
-void input_register(struct bmon_module *m)
-{
-	module_register(&input_subsys, m);
+void input_register(struct bmon_module *m) {
+  module_register(&input_subsys, m);
 }
 
-static void activate_default(void)
-{
-	/*
-	 * Try to activate a default input module if the user did not make
-	 * a selection
-	 */
-	if (!input_subsys.s_nmod) {
-		struct bmon_module *m;
+static void activate_default(void) {
+  /*
+   * Try to activate a default input module if the user did not make
+   * a selection
+   */
+  if (!input_subsys.s_nmod) {
+    struct bmon_module *m;
 
 #ifdef SYS_LINUX
-		if (!input_set("netlink"))
-			return;
+    if (!input_set("netlink")) return;
 
-		if (!input_set("proc"))
-			return;
+    if (!input_set("proc")) return;
 #endif
 
 #ifdef SYS_BSD
-		if (!input_set("sysctl"))
-			return;
+    if (!input_set("sysctl")) return;
 #endif
 
-		/* Fall back to anything that could act as default */
-		list_for_each_entry(m, &input_subsys.s_mod_list, m_list) {
-			if (m->m_flags & BMON_MODULE_DEFAULT)
-				if (!input_set(m->m_name))
-					return;
-		}
+    /* Fall back to anything that could act as default */
+    list_for_each_entry(m, &input_subsys.s_mod_list, m_list) {
+      if (m->m_flags & BMON_MODULE_DEFAULT)
+        if (!input_set(m->m_name)) return;
+    }
 
-		quit("No input module found\n");
-	}
+    quit("No input module found\n");
+  }
 }
 
-void input_read(void)
-{
-	module_foreach_run_enabled(&input_subsys);
-}
+void input_read(void) { module_foreach_run_enabled(&input_subsys); }
 
-int input_set(const char *name)
-{
-	return module_set(&input_subsys, name);
-}
+int input_set(const char *name) { return module_set(&input_subsys, name); }
 
 static struct bmon_subsys input_subsys = {
-	.s_name			= "input",
-	.s_activate_default	= &activate_default,
-	.s_mod_list		= LIST_SELF(input_subsys.s_mod_list),
+    .s_name = "input",
+    .s_activate_default = &activate_default,
+    .s_mod_list = LIST_SELF(input_subsys.s_mod_list),
 };
 
-static void __init __input_init(void)
-{
-	module_register_subsys(&input_subsys);
-}
+static void __init __input_init(void) { module_register_subsys(&input_subsys); }

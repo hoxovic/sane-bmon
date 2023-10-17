@@ -29,51 +29,49 @@
 #include <bmon/bmon.h>
 #include <bmon/conf.h>
 
-#define BMON_MODULE_ENABLED		(1 << 0) /* Enabled */
-#define BMON_MODULE_DEFAULT		(1 << 1) /* Suitable as default */
-#define BMON_MODULE_AUTO		(1 << 2) /* Auto enable */
+#define BMON_MODULE_ENABLED (1 << 0) /* Enabled */
+#define BMON_MODULE_DEFAULT (1 << 1) /* Suitable as default */
+#define BMON_MODULE_AUTO (1 << 2)    /* Auto enable */
 
 struct bmon_subsys;
 
-struct bmon_module
-{
-	char *			m_name;
+struct bmon_module {
+  char *m_name;
 
-	int		      (*m_init)(void);
-	int		      (*m_probe)(void);
-	void		      (*m_shutdown)(void);
+  int (*m_init)(void);
+  int (*m_probe)(void);
+  void (*m_shutdown)(void);
 
-	void		      (*m_parse_opt)(const char *, const char *);
+  void (*m_parse_opt)(const char *, const char *);
 
-	void		      (*m_pre)(void);
-	void		      (*m_do)(void);
-	void		      (*m_post)(void);
+  void (*m_pre)(void);
+  void (*m_do)(void);
+  void (*m_post)(void);
 
-	int			m_flags;
-	struct list_head	m_list;
-	struct bmon_subsys     *m_subsys;
+  int m_flags;
+  struct list_head m_list;
+  struct bmon_subsys *m_subsys;
 };
 
-struct bmon_subsys
-{
-	char *			s_name;
-	int			s_nmod;
-	struct list_head	s_mod_list;
+struct bmon_subsys {
+  char *s_name;
+  int s_nmod;
+  struct list_head s_mod_list;
 
-	void		      (*s_activate_default)(void);
+  void (*s_activate_default)(void);
 
-	struct list_head	s_list;
+  struct list_head s_list;
 };
 
-extern void		module_foreach_run_enabled_pre(struct bmon_subsys *);
-extern void		module_foreach_run_enabled(struct bmon_subsys *);
-extern void		module_foreach_run_enabled_post(struct bmon_subsys *);
+extern void module_foreach_run_enabled_pre(struct bmon_subsys *);
+extern void module_foreach_run_enabled(struct bmon_subsys *);
+extern void module_foreach_run_enabled_post(struct bmon_subsys *);
 
-extern int		module_register(struct bmon_subsys *, struct bmon_module *);
-extern int		module_set(struct bmon_subsys *, const char *);
+extern int module_register(struct bmon_subsys *, struct bmon_module *);
+extern int module_set(struct bmon_subsys *, const char *);
 
-extern void		module_init(void);
-extern void		module_shutdown(void);
-extern void		module_register_subsys(struct bmon_subsys *);
+extern void module_init(void);
+extern void module_shutdown(void);
+extern void module_register_subsys(struct bmon_subsys *);
 
 #endif

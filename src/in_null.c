@@ -27,36 +27,28 @@
 #include <bmon/input.h>
 #include <bmon/utils.h>
 
-static void null_read(void)
-{
-	DBG("null: reading...");
+static void null_read(void) { DBG("null: reading..."); }
+
+static void print_help(void) {
+  printf(
+      "null - Do not collect statistics at all\n"
+      "\n"
+      "  Will not collect any statistics at all, used to disable \n"
+      "  local statistics collection.\n"
+      "  Author: Thomas Graf <tgraf@suug.ch>\n");
 }
 
-static void print_help(void)
-{
-	printf(
-	"null - Do not collect statistics at all\n" \
-	"\n" \
-	"  Will not collect any statistics at all, used to disable \n" \
-	"  local statistics collection.\n" \
-	"  Author: Thomas Graf <tgraf@suug.ch>\n");
-}
-
-static void null_parse_opt(const char *type, const char *value)
-{
-	if (!strcasecmp(type, "help")) {
-		print_help();
-		exit(0);
-	}
+static void null_parse_opt(const char *type, const char *value) {
+  if (!strcasecmp(type, "help")) {
+    print_help();
+    exit(0);
+  }
 }
 
 static struct bmon_module null_ops = {
-	.m_name			= "null",
-	.m_do			= null_read,
-	.m_parse_opt		= null_parse_opt,
+    .m_name = "null",
+    .m_do = null_read,
+    .m_parse_opt = null_parse_opt,
 };
 
-static void __init null_init(void)
-{
-	input_register(&null_ops);
-}
+static void __init null_init(void) { input_register(&null_ops); }
