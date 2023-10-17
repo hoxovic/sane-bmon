@@ -12,3 +12,5 @@ Makefile
 /aclocal.m4
 /configure
 /config.*
+
+/.ccls-cache/
